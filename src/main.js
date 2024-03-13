@@ -29,9 +29,11 @@ import ChevronIcon from './components/icons/ChevronIcon.vue'
 import CheckIcon from './components/icons/CheckIcon.vue'
 import './assets/index.css'
 import './assets/theme.css'
+import router from './routers/index'
 
 const app = createApp(App)
 app.use(i18n)
+app.use(router)
 app.component('Input', Input)
 app.component('Textarea', Textarea)
 app.component('Dropdown', Dropdown)
