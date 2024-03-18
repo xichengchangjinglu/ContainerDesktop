@@ -31,12 +31,16 @@ import ContainerItem from './views/ContainerManager/components/ContainerItem.vue
 import './assets/index.css'
 import './assets/theme.css'
 import router from './routers/index'
-import ElementPlus from 'element-plus'
+import { DatePicker } from "ant-design-vue";
+import 'ant-design-vue/dist/antd.css';
+import { createPinia } from 'pinia'
 
 const app = createApp(App)
+const pinia = createPinia()
+app.use(pinia)
 app.use(i18n)
 app.use(router)
-app.use(ElementPlus)
+app.use(DatePicker)
 app.component('Input', Input)
 app.component('Textarea', Textarea)
 app.component('Dropdown', Dropdown)

@@ -30,6 +30,11 @@
 </template>
 
 <style scoped>
+    @font-face {
+        font-family: 'HarmonyOS_Sans_SC_Regular';
+        src: url('../../../assets/fonts/HarmonyOS_Sans_SC_Regular.ttf') format('truetype');
+    }
+
     .container{
         width: 366px;
         height: 236px;
