@@ -127,7 +127,9 @@
 
 <script setup>
 import { ref, reactive } from "vue";
-import { notification } from 'ant-design-vue';
+import { ElNotification } from 'element-plus'
+// import { notification } from 'ant-design-vue';
+// import 'ant-design-vue/dist/antd.css';
 
 const isLogin = ref(true);
 
@@ -144,11 +146,11 @@ const registerFormData = reactive({
 })
 
 const loginErrorNoUserOrPasswd =  () => {
-    notification['error']({
-        message: '登录失败',
-        description:
-            '请输入用户名或密码',
-    });
+    ElNotification({
+      title: '登录失败',
+      message: '请输入用户名或密码',
+      type: 'error',
+    })
 };
 
 const toggleLoginStatus = () => {
@@ -162,35 +164,35 @@ const login = () => {
 };
 
 const registerErrorUsername =  () => {
-    notification['error']({
-        message: '注册失败',
-        description:
-            '用户名格式不正确！',
-    });
+    ElNotification({
+      title: '注册失败',
+      message: '用户名格式不正确！',
+      type: 'error',
+    })
 };
 
 const registerErrorPassword =  () => {
-    notification['error']({
-        message: '注册失败',
-        description:
-            '密码格式不正确！',
-    });
+    ElNotification({
+      title: '注册失败',
+      message: '密码格式不正确！',
+      type: 'error',
+    })
 };
 
 const registerErrorConfirmPassword =  () => {
-    notification['error']({
-        message: '注册失败',
-        description:
-            '两次输入的密码不一致！',
-    });
+    ElNotification({
+      title: '注册失败',
+      message: '两次输入的密码不一致！',
+      type: 'error',
+    })
 };
 
 const registerErrorMail =  () => {
-    notification['error']({
-        message: '注册失败',
-        description:
-            '邮箱格式不正确！',
-    });
+    ElNotification({
+      title: '注册失败',
+      message: '邮箱格式不正确！',
+      type: 'error',
+    })
 };
 
 const checkRegistration = () => {

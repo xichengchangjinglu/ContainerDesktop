@@ -32,12 +32,15 @@ import './assets/index.css'
 import './assets/theme.css'
 import router from './routers/index'
 import { DatePicker } from "ant-design-vue";
-import 'ant-design-vue/dist/antd.css';
+// import 'ant-design-vue/dist/antd.css';
 import { createPinia } from 'pinia'
+import ElementPlus from 'element-plus'
+import 'element-plus/dist/index.css'
 
 const app = createApp(App)
 const pinia = createPinia()
 app.use(pinia)
+app.use(ElementPlus)
 app.use(i18n)
 app.use(router)
 app.use(DatePicker)

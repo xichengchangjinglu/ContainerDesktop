@@ -6,25 +6,25 @@
     <div class="container-name">
       <img src="../../../assets/images/ubuntu.png">
       <div class="container-name-info">
-        <p class="image-name">KylinOS</p>
-        <p class="image-id">3abf3s324</p>
+        <p class="image-name">{{containerInfo.name}}</p>
+        <p class="image-id">{{containerInfo.vmid}}</p>
       </div>
-      <div class="toggle" :class="{ 'active': isActive }" @click="toggleSwitch">
+      <!-- <div class="toggle" :class="{ 'active': isActive }" @click="toggleSwitch">
         <div class="handle" />
-      </div>
+      </div> -->
     </div>
     <div class="container-description">
       <div class="firstline">
-        <p>创建于：2023-2-23</p>
-        <p>状态：运行中</p>
-        <p>剩余：4GB</p>
+        <p>占用：{{Math.floor(containerInfo.mem/ (1024 * 1024))}}MB</p>
+        <p>上限：{{Math.floor(containerInfo.maxmem/ (1024 * 1024 * 1024))}}GB</p>
+        <p>状态：{{containerInfo.status}}</p>
       </div>
       <p>备注：上课使用的系统</p>
     </div>
     <div class="container-button">
-      <button>删除</button>
-      <button>重启</button>
-      <button>设置</button>
+      <button @click="stopContainer(nodeStore.nodeName,containerInfo.vmid)">关闭</button>
+      <button @click="startContainer(nodeStore.nodeName,containerInfo.vmid)">启动</button>
+      <button>更多</button>
     </div>
   </div>
 </template>
@@ -136,6 +136,7 @@
         width: 82px;
         height: 48px;
         border-radius: 10px;
+        border-style: solid;
     }
 
     .container-button button:nth-of-type(1){
@@ -155,11 +156,82 @@
 </style>
 
 <script setup>
-    import { ref } from 'vue'
+    import { defineProps } from 'vue'
+    import { ElNotification } from 'element-plus'
+    import { useNodeStore } from '../../../stores/useNodeStore.js'
+    import { useTokenStore } from '../../../stores/useTokenStore.js'
+    import axios from 'axios'
 
-    const isActive = ref(false)
+    const props = defineProps(['containerInfo','index']);
+    const nodeStore = useNodeStore();
+    const tokenStore = useTokenStore();
 
-    const toggleSwitch = () => {
-        isActive.value = !isActive.value
+    // const isActive = ref(false)
+    // const toggleSwitch = () => {
+    //     isActive.value = !isActive.value
+    // }
+
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async function updateItem(){
+        ElNotification({
+            title: 'Warning',
+            message: '容器正在操作中',
+            type: 'warning',
+            duration: 6000
+        })
+        await sleep(5000);
+    }
+
+    async function startContainer(node,vmid){
+        if(props.containerInfo.status=="running"){
+            ElNotification({
+                title: 'Error',
+                message: '容器已经启动，请勿重复启动',
+                type: 'error',
+            })
+            return;
+        }
+        let url = `/api2/json/nodes/${node}/lxc/${vmid}/status/start`
+        let data = {}
+        let startContainerResponse = await axios.post(url,data,{
+            headers:{
+                'CSRFPreventionToken': tokenStore.CSRFPreventionToken
+            }
+        })
+        await updateItem();
+        nodeStore.containerList[props.index].status = "running"
+        ElNotification({
+            title: 'Success',
+            message: '容器启动成功',
+            type: 'success',
+        });
+    }
+
+    async function stopContainer(node,vmid){
+        if(props.containerInfo.status=="stopped"){
+            ElNotification({
+                title: 'Error',
+                message: '容器已经关闭，请勿重复关闭',
+                type: 'error',
+            })
+            return;
+        }
+        let url = `/api2/json/nodes/${node}/lxc/${vmid}/status/shutdown`
+        let data = {}
+        let stopContainerResponse = await axios.post(url,data,{
+            headers:{
+                'CSRFPreventionToken': tokenStore.CSRFPreventionToken
+            }
+        })
+        await updateItem();
+        nodeStore.containerList[props.index].status = "stopped"
+        ElNotification({
+            title: 'Success',
+            message: '容器关闭成功',
+            type: 'success',
+        });
     }
 </script>

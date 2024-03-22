@@ -18,6 +18,23 @@ const config = {
       '@novnc/novnc/core/input/keysymdef',
       '@novnc/novnc/core/util/browser'
     ]
+  },
+  server: {
+    proxy: {
+      '/api2': {
+        target: 'https://container-desk.top/',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api2': '/api2'
+        }
+      },
+      '/api/handler': {
+        target: 'http://localhost:9000',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, '/api'),
+        secure: false
+      }
+    }
   }
 }
 
