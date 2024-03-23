@@ -2,6 +2,8 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import Vnc from "../views/Vnc.vue"
 import ContainerManager from "../views/ContainerManager/ContainerManage.vue"
 import Login from "../views/Login/Login.vue"
+import OperationsPanel from "../views/OperationsPanel/OperationsPanel.vue"
+import PersonalProfile from "../views/PersonnalProfile/PersonalProfile.vue"
 import { useTokenStore } from '../stores/useTokenStore.js';
 import { ElNotification } from 'element-plus'
 
@@ -20,6 +22,16 @@ const router = new createRouter({
         {
             path: "/Vnc",
             component: Vnc,
+            meta: { requiresAuth: false }
+        },
+        {
+            path: "/OperationsPanel",
+            component: OperationsPanel,
+            meta: { requiresAuth: false }
+        },
+        {
+            path: "/PersonalProfile",
+            component: PersonalProfile,
             meta: { requiresAuth: false }
         }
     ]

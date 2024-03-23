@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/mustache-interpolation-spacing -->
 <!-- eslint-disable vue/max-attributes-per-line -->
 <!-- eslint-disable no-unused-vars -->
 <!-- eslint-disable vue/singleline-html-element-content-newline -->
@@ -196,7 +197,7 @@
         }
         let url = `/api2/json/nodes/${node}/lxc/${vmid}/status/start`
         let data = {}
-        let startContainerResponse = await axios.post(url,data,{
+        await axios.post(url,data,{
             headers:{
                 'CSRFPreventionToken': tokenStore.CSRFPreventionToken
             }
@@ -221,7 +222,7 @@
         }
         let url = `/api2/json/nodes/${node}/lxc/${vmid}/status/shutdown`
         let data = {}
-        let stopContainerResponse = await axios.post(url,data,{
+        await axios.post(url,data,{
             headers:{
                 'CSRFPreventionToken': tokenStore.CSRFPreventionToken
             }
