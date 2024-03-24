@@ -18,6 +18,7 @@
 .content-main-container{
   margin-left: 250px;
   margin-top: 80px;
+  width: calc(100vw - 290px);
   display: flex;
   flex-wrap: wrap;
 }
