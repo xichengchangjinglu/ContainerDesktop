@@ -28,6 +28,7 @@ import TouchKeyboardIcon from './components/icons/TouchKeyboardIcon.vue'
 import ChevronIcon from './components/icons/ChevronIcon.vue'
 import CheckIcon from './components/icons/CheckIcon.vue'
 import ContainerItem from './views/ContainerManager/components/ContainerItem.vue'
+import TemplateItem from './views/ContainerTemplate/components/TemplateItem.vue'
 import SiderBar from './components/Siderbar.vue'
 import UserHeader from './components/UserHeader.vue'
 import './assets/index.css'
@@ -68,4 +69,5 @@ app.component('CheckIcon', CheckIcon)
 app.component('ContainerItem', ContainerItem)
 app.component('Siderbar', SiderBar)
 app.component('UserHeader', UserHeader)
+app.component('TemplateItem', TemplateItem);
 app.mount('#app')

@@ -1,3 +1,4 @@
+<!-- eslint-disable vue/max-attributes-per-line -->
 <template>
   <div>
     <div class="content-search-container">
@@ -8,7 +9,7 @@
       </div>
     </div>
     <div class="content-user-container">
-      <div class="download-bg">
+      <div class="download-bg" @click="router.push('/ContainerTemplate');">
         <img src="../assets/images/download.png">
       </div>
       <div class="username-bg">
@@ -72,7 +73,8 @@
   width: 40px;
   height: 40px;
   margin-left: 3px;
-  margin-top: 3px
+  margin-top: 3px;
+  cursor: pointer;
 }
 
 .username-bg{
@@ -94,5 +96,7 @@
 </style>
 
 <script setup>
+import { useRouter } from "vue-router";
 
+const router = useRouter();
 </script>

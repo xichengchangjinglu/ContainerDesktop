@@ -4,6 +4,7 @@ import ContainerManager from "../views/ContainerManager/ContainerManage.vue"
 import Login from "../views/Login/Login.vue"
 import OperationsPanel from "../views/OperationsPanel/OperationsPanel.vue"
 import PersonalProfile from "../views/PersonnalProfile/PersonalProfile.vue"
+import ContainerTemplate from "../views/ContainerTemplate/ContainerTemplate.vue"
 import { useTokenStore } from '../stores/useTokenStore.js';
 import { ElNotification } from 'element-plus'
 
@@ -32,6 +33,11 @@ const router = new createRouter({
         {
             path: "/PersonalProfile",
             component: PersonalProfile,
+            meta: { requiresAuth: false }
+        },
+        {
+            path: "/ContainerTemplate",
+            component: ContainerTemplate,
             meta: { requiresAuth: false }
         }
     ]

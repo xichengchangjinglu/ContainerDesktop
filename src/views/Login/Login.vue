@@ -88,6 +88,7 @@
   width: 100%;
   margin-left: 240%;
   margin-top: 1vh;
+  cursor: pointer;
 }
 
 .login-input {

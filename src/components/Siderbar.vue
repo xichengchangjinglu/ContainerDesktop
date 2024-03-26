@@ -146,6 +146,7 @@
   font-family: "HarmonyOS_Sans_SC_Regular", sans-serif;
   font-size: 16px;
   color: #718096;
+  cursor: pointer;
 }
 
 .sidebar-exit-container img {
