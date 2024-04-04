@@ -26,7 +26,7 @@
           >
             运维面板
           </li>
-          <li
+          <!-- <li
             :class="{
               'router-active-third': currentRoutePath === '/PersonalProfile',
               'router-inactive-third': currentRoutePath !== '/PersonalProfile',
@@ -34,7 +34,7 @@
             @click="router.push('/PersonalProfile');"
           >
             个人中心
-          </li>
+          </li> -->
         </ul>
       </ul>
     </div>

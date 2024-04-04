@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 
 export const useTokenStore = defineStore('tokenStore', {
     state: () => ({
-        username: 'test@pve',
+        username: 'testenduser@pve',
         password: 'd-c.t_pve',
         ticket: '',
         CSRFPreventionToken: ''

@@ -22,7 +22,7 @@ const config = {
   server: {
     proxy: {
       '/api2': {
-        target: 'https://container-desk.top/',
+        target: 'https://cd.skimit.cn',
         changeOrigin: true,
         pathRewrite: {
           '^/api2': '/api2'

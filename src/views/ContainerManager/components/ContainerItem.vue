@@ -22,7 +22,8 @@
         </p>
         <p>状态：{{ containerInfo.status }}</p>
       </div>
-      <p>备注：上课使用的系统</p>
+      <p v-if="des ==''">备注：无</p>
+      <p v-else>备注：{{des}}</p>
     </div>
     <div class="container-button">
       <button @click="stopContainer(nodeStore.nodeName, containerInfo.vmid)">
@@ -35,7 +36,7 @@
     </div>
   </div>
   <el-dialog v-model="isConfigActive" :title="containerInfo.name" width="60%">
-    <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
+    <el-tabs v-model="activeName" class="demo-tabs">
       <el-tab-pane label="快照管理" name="first">
         <el-table :key="isUpdate" :data="tableData" style="width: 100%">
           <el-table-column prop="name" label="名称" width="180" />
@@ -51,7 +52,67 @@
           </el-table-column>
         </el-table>
       </el-tab-pane>
-      <el-tab-pane label="容器设置" name="second">容器设置</el-tab-pane>
+      <el-tab-pane label="容器设置" name="second">
+        <el-descriptions title="容器信息" border>
+          <el-descriptions-item label="主机名">kylin-mini-demo</el-descriptions-item>
+          <el-descriptions-item label="内存">4096</el-descriptions-item>
+          <el-descriptions-item label="架构">amd64</el-descriptions-item>
+          <el-descriptions-item label="系统类型">
+            <el-tag size="small">ubuntu</el-tag>
+          </el-descriptions-item>
+          <el-descriptions-item label="数据卷">local-lvm:vm-1001-disk-0,size=8G</el-descriptions-item>
+          <el-descriptions-item label="核心数">4</el-descriptions-item>
+        </el-descriptions>
+        <el-popconfirm title="删除后无法恢复" @confirm="deleteContainer()">
+          <template #reference>
+            <button class="container-delete-btn">删除</button>
+          </template>
+        </el-popconfirm>
+      </el-tab-pane>
+      <el-tab-pane label="远程桌面连接设置" name="third">
+        <p class="connect-status-title">当前Vnc服务状态：正常</p>
+        <div class="connect-status-container">
+          <div class="connect-status-item-short">
+            <el-tooltip content="指示是否应该阻止将任何事件（例如按键或鼠标移动）发送到服务器">
+              <p>只读</p>
+            </el-tooltip>
+            <el-switch v-model="vncConnectConfig.viewOnlyValue" class="el-switch-wrapper"/>
+          </div>
+          <div class="connect-status-item">
+            <el-tooltip content="是否应将远程会话剪切到其容器，禁用时，将显示滚动条以处理产生的溢出">
+              <p>画面裁剪</p>
+            </el-tooltip>
+            <el-switch v-model="vncConnectConfig.clipViewportValue" class="el-switch-wrapper"/>
+          </div>
+          <div class="connect-status-item">
+            <el-tooltip content="指示远程会话是否应在本地扩展，以便它适合其容器。禁用时，如果远程会话小于其容器，则它将居中，或者如果它更大，则根据容器处理">
+              <p>画面适应</p>
+            </el-tooltip>
+            <el-switch v-model="vncConnectConfig.resizeSessionValue" class="el-switch-wrapper"/>
+          </div>
+          <div class="connect-status-item">
+            <el-tooltip content="若当前网络延迟较高，请调整连接质量，越低则画面压缩越强">
+              <p>连接质量</p>
+            </el-tooltip>
+            <div class="num-choose">
+              <el-input-number v-model="vncConnectConfig.qualityLevelValue" :min="0" :max="9" size="small"/>
+            </div>
+          </div>
+          <!-- <div class="connect-config-btn">
+            <button>更改设置</button>
+          </div> -->
+        </div>
+        <div class="connect-status-password">
+          <p>连接密码</p>
+          <input type="password" v-model="vncConnectConfig.vncPasswd">
+          <div class="connect-vnc-btn">
+            <button @click="connectToVnc()">连接</button>
+          </div>
+          <!-- <div class="connect-vnc-btn">
+            <button @click="disconnectToVnc()">断开</button>
+          </div> -->
+        </div>
+      </el-tab-pane>
     </el-tabs>
   </el-dialog>
   <el-dialog
@@ -216,6 +277,81 @@
 .demo-tabs > .el-tabs__content {
   padding: 32px;
 }
+
+.connect-status-title{
+  color: #161c2b;
+}
+
+.connect-status-container{
+  color: #161c2b;
+  display: flex;
+}
+
+.connect-status-item-short{
+  width: 100px;
+  display: flex;
+  align-items: center;
+}
+
+.connect-status-item{
+  width: 130px;
+  display: flex;
+  align-items: center;
+}
+
+.el-switch-wrapper{
+  margin-left: 10px;
+}
+
+.num-choose{
+  margin-left: 15px;
+  width: 20px;
+}
+
+.connect-status-password{
+  color: #161c2b;
+  display: flex;
+  align-items: center;
+}
+
+.connect-status-password input{
+  margin-left: 15px;
+  border-radius: 10px;
+  border-style: solid;
+}
+
+.connect-config-btn{
+  margin-left: 90px;
+  margin-top: 13px;
+}
+
+.connect-config-btn button{
+  background-color: #ffffff;
+  border-style: solid;
+  border-radius: 10px;
+  border-color: #808080;
+}
+
+.connect-vnc-btn{
+  margin-left: 20px;
+}
+
+.connect-vnc-btn button{
+  background-color: #ffffff;
+  border-style: solid;
+  border-radius: 10px;
+  border-color: #808080;
+}
+
+.container-delete-btn{
+  background-color: #ffffff;
+  border-style: solid;
+  margin-top: 15px;
+  width: 70px;
+  border-radius: 10px;
+  border-color: #ff5733;
+  color: #ff5733;
+}
 </style>
 
 <script setup>
@@ -223,11 +359,16 @@ import { defineProps, ref, onMounted, reactive } from "vue";
 import { ElNotification } from "element-plus";
 import { useNodeStore } from "../../../stores/useNodeStore.js";
 import { useTokenStore } from "../../../stores/useTokenStore.js";
+import { useVncStore } from "../../../stores/useVncStore.js"
+import { useRouter } from "vue-router";
 import axios from "axios";
 
 const props = defineProps(["containerInfo", "index"]);
 const nodeStore = useNodeStore();
 const tokenStore = useTokenStore();
+const vncStore = useVncStore();
+
+const router = useRouter();
 
 const isConfigActive = ref(false);
 const activeName = ref("first");
@@ -235,22 +376,119 @@ const dialogFormVisible = ref(false);
 
 const isUpdate = ref(Math.random());
 const snapshotList = ref([]);
+const des = ref("")
 let tableData = [];
 const form = reactive({
   name: "",
   description: "",
 });
+const vncConnectConfig = reactive({
+  vncIp: "",
+  viewOnlyValue: false,
+  clipViewportValue: true,
+  resizeSessionValue: true,
+  qualityLevelValue: 0,
+  vncPasswd: ""
+})
 
 onMounted(() => {
+  getContainerDescription();
   getSnapshot();
+  getContainerIp();
 });
 
-const handleClick = (tab, event) => {
-  console.log(tab, event);
-};
+// const handleClick = (tab, event) => {
+//   console.log(tab, event);
+// };
+
+// 获取描述信息
+async function getContainerDescription(){
+  let url = `/api2/json/nodes/${nodeStore.nodeName}/lxc/${props.containerInfo.vmid}/config`;
+  let descriptionResponse = await axios.get(url);
+  let data = descriptionResponse.data.data;
+  if('description' in data){
+    des.value = data['description'];
+  }
+}
+
+// 删除容器
+async function deleteContainer(){
+  if(props.containerInfo.status=="running"){
+    ElNotification({
+      title: "Error",
+      message: "请先停止容器运行",
+      type: "error",
+    });
+    return;
+  }
+  let url = `/api2/json/nodes/${nodeStore.nodeName}/lxc/${props.containerInfo.vmid}`;
+  let header = {
+    headers: {
+      CSRFPreventionToken: tokenStore.CSRFPreventionToken,
+    },
+  };
+  let deleteContainerResponse = await axios.delete(url,header);
+  ElNotification({
+      title: "Warning",
+      message: "正在删除中",
+      type: "warning",
+  });
+  sleep(2000);
+  nodeStore.containerList = nodeStore.containerList.filter(item=>{
+    item.vmid != props.containerInfo.vmid;
+  })
+  isConfigActive.value = true
+  ElNotification({
+      title: "Success",
+      message: "删除成功",
+      type: "success",
+  });
+  location.reload(true);
+}
+
+// 连接到远程桌面服务
+function connectToVnc(){
+  if(props.containerInfo.status=="stopped"){
+    ElNotification({
+        title: "Error",
+        message: "请先启动容器",
+        type: "error",
+    });
+    return;
+  }
+  if(vncConnectConfig.vncPasswd == ""){
+    ElNotification({
+        title: "Error",
+        message: "请填写密码",
+        type: "error",
+    });
+    return;
+  }
+  let nextRouter = "/NovncConnect/" + vncConnectConfig.vncIp;
+  vncStore.vncConnectConfig = vncConnectConfig;
+  router.push(nextRouter);
+}
+
+// 获取容器ip用来连接vnc服务
+async function getContainerIp(){
+  let url = `/api2/json/nodes/${nodeStore.nodeName}/lxc/${props.containerInfo.vmid}/interfaces`;
+  let interfacesResponse = await axios.get(url,{
+    headers: {
+      CSRFPreventionToken: tokenStore.CSRFPreventionToken,
+    },
+  });
+  let data = interfacesResponse.data.data;
+  if(data!=null){
+    data.forEach(item => {
+      if( 'inet' in item && item['inet'].startsWith("172.18")){
+        vncConnectConfig.vncIp = item['inet'].split('/')[0];
+      }
+    });
+  }
+}
 
 async function handleRollBack(row) {
-  console.log(row.name, row.description);
+  // console.log(row.name, row.description);
   let url = `/api2/json/nodes/${nodeStore.nodeName}/lxc/${props.containerInfo.vmid}/snapshot/${row.name}/rollback`;
   let snapshotRollBackResponse = await axios.post(url, 
     {

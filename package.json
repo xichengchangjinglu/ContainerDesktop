@@ -7,7 +7,7 @@
     "lint": "eslint '*.js' 'src/**/*.js' 'src/**/*.vue'"
   },
   "dependencies": {
-    "@novnc/novnc": "^1.2.0",
+    "@novnc/novnc": "^1.4.0",
     "ant-design-vue": "^2.2.8",
     "axios": "^1.6.8",
     "echarts": "^5.5.0",

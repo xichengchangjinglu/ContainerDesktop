@@ -129,8 +129,14 @@
 <script setup>
 import { ref, reactive } from "vue";
 import { ElNotification } from 'element-plus'
+import axios from "axios"
+import { useTokenStore } from '../../stores/useTokenStore'
+import { useRouter } from "vue-router";
 // import { notification } from 'ant-design-vue';
 // import 'ant-design-vue/dist/antd.css';
+
+const tokenStore = useTokenStore();
+const router = useRouter();
 
 const isLogin = ref(true);
 
@@ -158,11 +164,34 @@ const toggleLoginStatus = () => {
   isLogin.value = !isLogin.value;
 };
 
-const login = () => {
-    if(loginFormData.username==""||loginFormData.password==""){
-        loginErrorNoUserOrPasswd();
+async function login(){
+    try {
+        if (loginFormData.username == "" || loginFormData.password == "") {
+            loginErrorNoUserOrPasswd();
+            return; // 如果用户名或密码为空，直接返回，不执行请求
+        }
+        let url = `/api2/json/access/ticket`;
+        let data = {
+            "username": loginFormData.username+'@pve',
+            "password": loginFormData.password
+        };
+        let loginResponse = await axios.post(url, data);
+        tokenStore.username = loginFormData.username+'@pve';
+        tokenStore.password = loginFormData.password;
+        ElNotification({
+          title: '登录成功',
+          message: '欢迎回来',
+          type: 'success',
+        })
+        router.push("/ContainerManager");
+    } catch (error) {
+      ElNotification({
+        title: '登录失败',
+        message: '请检查用户名和密码',
+        type: 'error',
+      })
     }
-};
+}
 
 const registerErrorUsername =  () => {
     ElNotification({

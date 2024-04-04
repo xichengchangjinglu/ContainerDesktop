@@ -65,10 +65,10 @@ async function initInfo() {
         return Promise.reject(error);
     });
 
-    await axios.get("/api2/json/cluster/status").then((res)=>{
-      const nodeName = res.data.data[0].name;
-      nodeStore.nodeName = nodeName;
-    })
+    // await axios.get("/api2/json/cluster/status").then((res)=>{
+    //   const nodeName = res.data.data[0].name;
+    //   nodeStore.nodeName = nodeName;
+    // })
 
     await axios.get("/api2/json/cluster/resources").then((res)=>{
       let containerList = res.data.data.filter((item)=>{
@@ -76,6 +76,9 @@ async function initInfo() {
       });
       nodeStore.containerList = containerList;
       containerListFilter.value = containerList;
+
+      const nodeName = res.data.data[0].node;
+      nodeStore.nodeName = nodeName;
     })
 }
 

@@ -5,6 +5,8 @@ import Login from "../views/Login/Login.vue"
 import OperationsPanel from "../views/OperationsPanel/OperationsPanel.vue"
 import PersonalProfile from "../views/PersonnalProfile/PersonalProfile.vue"
 import ContainerTemplate from "../views/ContainerTemplate/ContainerTemplate.vue"
+// Vnc连接测试（正式误用）
+import NovncConnect from "../views/NovncConnect/NovncConnect.vue"
 import { useTokenStore } from '../stores/useTokenStore.js';
 import { ElNotification } from 'element-plus'
 
@@ -38,6 +40,11 @@ const router = new createRouter({
         {
             path: "/ContainerTemplate",
             component: ContainerTemplate,
+            meta: { requiresAuth: false }
+        },
+        {
+            path: "/NovncConnect/:containerIp",
+            component: NovncConnect,
             meta: { requiresAuth: false }
         }
     ]

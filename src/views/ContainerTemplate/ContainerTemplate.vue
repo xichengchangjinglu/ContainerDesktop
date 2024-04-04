@@ -29,7 +29,9 @@ import { ref } from 'vue'
 const templateList = ref([
   {
     imageUrl: "../../../assets/images/template.png",
-    description: "银河麒麟建设自主的开源供应链，发起中国首个开源桌面操作系统根社区openKylin，银河麒麟操作系统以openKylin等自主根社区为依托，发布最新版本"
+    description: "银河麒麟建设自主的开源供应链，发起中国首个开源桌面操作系统根社区openKylin，银河麒麟操作系统以openKylin等自主根社区为依托，发布最新版本",
+    ostemplate: "local:vztmpl/ubuntukylin-22.04-mini-20240329.tar.zst",
+    osname: "优麒麟"
   }
 ])
 </script>
